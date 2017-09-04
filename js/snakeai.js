@@ -1,12 +1,14 @@
 class SnakeAi{
 	constructor(ctx){		
 		this.ctx = ctx;
+		this.name = ut.randomName();
+		this.score = 0;
 		this.force =  4;		
 		this.velocity = new Point(2, -3); //arbitary point		
 		this.angle = 0;			
 		this.color = ut.randomColor();
-		this.size = ut.random(5, 10);
-		this.length = this.size * 2;				
+		this.size = 8;
+		this.length = ut.random(10, 50);			
 		this.arr = [];		
 
 		this.arr.push(new Point(ut.random(0, 2000), ut.random(0, 1000)));
@@ -14,7 +16,7 @@ class SnakeAi{
 
 		var self = this;
 		var moveArr = [];
-		var moveCount = 10;
+		var moveCount = 5;
 		var count = 0;
 		//initially
 		for (var i = 0; i < moveCount; i++) moveArr.push(i*(Math.PI/moveCount));
@@ -49,9 +51,25 @@ class SnakeAi{
 	
 
 	drawHead(){
+		var x = this.arr[0].x;
+		var y = this.arr[0].y;
+
+		//head
+		this.ctx.fillStyle = this.color;
 		this.ctx.beginPath();
-		this.ctx.arc(this.arr[0].x, this.arr[0].y, this.size, 0, 2*Math.PI);		
+		this.ctx.arc(x, y, this.size+1, 0, 2*Math.PI);		
 		this.ctx.fill();
+
+		//eye
+		this.ctx.fillStyle = "white";
+		this.ctx.beginPath();
+		this.ctx.arc(x, y, this.size-1, 0, 2*Math.PI);		
+		this.ctx.fill();
+
+		//name
+		this.ctx.fillStyle = this.color;
+		this.ctx.font="10px Arial";
+		this.ctx.fillText(this.name, x-5, y-10);
 	}
 
 	drawBody(x, y, i){
@@ -63,6 +81,11 @@ class SnakeAi{
 		this.ctx.beginPath();
 		this.ctx.arc(x, y, this.size - (i*0.05), 0, 2*Math.PI);
 		this.ctx.fill();	
+
+		this.ctx.strokeStyle = "white";
+		this.ctx.beginPath();
+		this.ctx.arc(x, y, this.size - (i*0.005), 0, 2*Math.PI);
+		this.ctx.stroke();
 	}
 
 	move(){
@@ -75,20 +98,23 @@ class SnakeAi{
 		}
 		this.arr[0].x += this.velocity.x;
 		this.arr[0].y += this.velocity.y;
-		this.drawHead();	
+		this.drawHead();
+		this.checkCollission();	
 	}
 
 	
-	checkBoundary(canvas){
-	}
-
-	reset(){		
-	}
-
-	checkCollission(target){	
-	}
-
-	
+	checkCollission(){	
+		var x = this.arr[0].x;
+		var y = this.arr[0].y;
+		for (var i = 0; i < game.foods.length; i++) {
+			if(ut.cirCollission(x, y, this.size, game.foods[i].pos.x, game.foods[i].pos.y, game.foods[i].size)){
+				 game.foods.splice(i, 1);
+				 this.length++;
+				 this.score++;
+				 this.arr.push(new Point(-100, -100));	
+			}			
+		}
+	}	
 	
 
 }

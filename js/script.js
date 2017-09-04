@@ -4,12 +4,20 @@ var ctxFood = document.getElementById("canvas1").getContext("2d");
 var ut = new Util();
 var game = new Game(canvas, ctxSnake, ctxFood);
 
+
+var mouseMoveCount = 0;
 canvas.onmousemove = function(e){
 	if(game.mouseDown){
+		if(mouseMoveCount < 3){
+			mouseMoveCount++;
+			return;
+		} 
 		game.cursor = ut.getMousePos(canvas, e);		
 		if(ut.getDistance(game.snake.arr[0], game.cursor) > 20){			
 			game.snake.angle = ut.getAngle(game.snake.arr[0], game.cursor);
 		}
+		mouseMoveCount = 0;
+		
 	}
 }
 

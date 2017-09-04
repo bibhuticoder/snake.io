@@ -11,21 +11,17 @@ class Food{
 
 	draw(){	
 
-		// this.ctx.shadowBlur=50;		
-		// this.ctx.shadowColor = this.color;
-
 		var grd=this.ctx.createRadialGradient(this.pos.x, this.pos.y, 2, this.pos.x+3, this.pos.y+3, 10);
-		grd.addColorStop(1,this.color);
+		grd.addColorStop(1, "gray");
 		grd.addColorStop(0, "white");
+		grd.addColorStop(0.5, this.color);
 		this.ctx.fillStyle = grd;
 
 		this.ctx.beginPath();
 		this.ctx.arc(this.pos.x, this.pos.y, this.size, 0, 2*Math.PI);		
 		this.ctx.fill();
 
-		//reset
-		// this.ctx.shadowBlur=0;
-							
+									
 	}
 
 }

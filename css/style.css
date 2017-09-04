@@ -7,7 +7,9 @@ body{
 
 #game{
 	position: relative;	
-	background-color: gray;	
+	/*background-image: url("../bg.jpg");
+	background-repeat: repeat;*/
+	background-color: dimgray;	
 	border-radius: 5px;
 	margin:0 auto;		
 }
