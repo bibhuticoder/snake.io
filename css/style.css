@@ -5,34 +5,31 @@ body{
 }
 
 
-#game{
+#game{	
 	position: relative;	
-	/*background-image: url("../bg.jpg");
-	background-repeat: repeat;*/
-	background-color: #17202A;	
-	border-radius: 5px;
-	margin:0 auto;		
+	margin:0 auto;	
+	margin-top: 100px;		
 }
 
 .cnv{
 	position: absolute;
 	top: 0px;
-	left: 0px;
-	z-index: 2;	
-
+	left: 0px;	
+	border-style: solid;	
 }
 
-#canvas2{
+#canvasFood{
 	background-color: transparent;
-	z-index: 4;
+	z-index: 2;
 }
 
-#canvas3{
+#canvasHex{
+	background-color: transparent;
+	z-index: 1;
+	/*background-color: black;*/
+}
+
+#canvasSnake{	
 	background-color: transparent;
 	z-index: 3;
-}
-
-#canvas1{	
-	background-color: transparent;
-	z-index: 100;
 }

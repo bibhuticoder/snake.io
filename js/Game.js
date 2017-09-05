@@ -6,8 +6,10 @@ class Game{
 		this.ctxHex = ctxHex;	
 		this.mouseDown;	
 		this.cursor;
-		this.WORLD = new Point(2000, 1000);		
-		this.SCREEN = new Point(800, 400);
+		this.WORLD_SIZE = new Point(4000, 2000);		
+		this.SCREEN_SIZE = new Point(800, 400);
+
+		this.world = new Point(-1200, -600);
 						
 		this.snakes = [];		
 		this.foods = [];
@@ -23,14 +25,15 @@ class Game{
 		for(var i=0; i<2; i++) this.snakes.push(new SnakeAi(this.ctxSnake));
 
 		// generate foods
-		for(var i=0; i<500; i++){			
-			this.foods.push(new Food(this.ctxFood, ut.random(-600, 1800), ut.random(-300, 900)));
+		for(var i=0; i<1000; i++){			
+			this.foods.push(new Food(this.ctxFood, ut.random(-1200 +  50, 2800 - 50),
+			ut.random(-600 + 50, 1400 - 50)));
 		}
 
 		//bricks		
 		var size = 50;
-		var inRows = this.SCREEN.x/size + 2;
-		var inCols = this.SCREEN.y/size + 2;
+		var inRows = this.SCREEN_SIZE.x/size + 2;
+		var inCols = this.SCREEN_SIZE.y/size + 2;
 		var start = new Point(-size, -size);
 		for(var i=0; i<inRows; i++){
 			for(var j=0; j<inCols; j++){
@@ -45,12 +48,13 @@ class Game{
 
 	draw(){
 
-		//draw bricks
-		this.drawBricks();
+		
 
 		//draw world
-		this.drawWorld();	
-		
+		this.drawWorld();
+
+		//draw bricks
+		// this.drawBricks();			
 
 		// move yourself
 		this.snakes[0].move();
@@ -70,11 +74,16 @@ class Game{
 	}
 
 	drawWorld(){
-		this.ctxFood.lineWidth = 2;
-		this.ctxFood.strokeRect(-(this.WORLD.x/2 - this.SCREEN.x/2),
-		-(this.WORLD.y/2 - this.SCREEN.y/2), this.WORLD.x, this.WORLD.y);
-		this.ctxFood.stroke();
-		this.ctxFood.lineWidth = 1;
+				
+		this.ctxHex.fillStyle = "white";
+		this.ctxHex.fillRect(this.world.x - 2, this.world.y - 2, this.WORLD_SIZE.x+4, this.WORLD_SIZE.y+4);
+
+		this.ctxHex.fillStyle = "#17202A";
+		this.ctxHex.fillRect(this.world.x, this.world.y, this.WORLD_SIZE.x, this.WORLD_SIZE.y);
+
+		this.world.x -= (this.snakes[0].velocity.x);
+		this.world.y -= (this.snakes[0].velocity.y);
+
 	}
 
 	drawScore(){
@@ -83,20 +92,24 @@ class Game{
 			this.ctxFood.fillStyle = this.snakes[i].mainColor;
 			this.ctxFood.font="bold 10px Arial";
 			this.ctxFood.fillText(this.snakes[i].name + ":" + this.snakes[i].score, start.x-5, start.y +i*15);
+		
+			this.ctxFood.fillText(this.snakes[0].pos.x + ", " + this.snakes[0].pos.y, 500, 50);
 		}
 	}
 
 	drawMap(){
-		var start = new Point(20, 20);
-		this.ctxFood.fillStyle = "#373737";
 		var mapSize = new Point(100, 50);
-		this.ctxFood.fillRect(start.x, this.canvas.height-mapSize.y, mapSize.x,  mapSize.y);
+		var start = new Point(20, this.canvas.height-mapSize.y);
+		this.ctxFood.fillStyle = "#373737";		
+		this.ctxFood.fillRect(start.x, start.y, mapSize.x,  mapSize.y);
 		this.ctxFood.fill();
 
 		//draw player in map
 		this.ctxFood.fillStyle = "red";
-		var playerInMap = new Point(mapSize.x/1800 * this.snakes[0].pos.x,
-		mapSize.y/900 * this.snakes[0].pos.y);
+		var playerInMap = new Point(start.x/this.world.x * this.snakes[0].pos.x,
+		start.y/this.world.y * this.snakes[0].pos.y);
+
+
 		// console.log(playerInMap);
 		this.ctxFood.beginPath();
 		this.ctxFood.arc(start.x + playerInMap.x, this.canvas.height-mapSize.y + playerInMap.y, 2, 0, 2*Math.PI);
@@ -110,17 +123,17 @@ class Game{
 			this.bricks[i].x -= this.snakes[0].velocity.x;
 			this.bricks[i].y -= this.snakes[0].velocity.y;
 
-			// this.ctxHex.fillStyle = "#2C3E50";
-			// this.ctxHex.fillRect(this.bricks[i].x + 5, this.bricks[i].y + 5, 40, 40);
+			this.ctxHex.fillStyle = "#2C3E50";
+			this.ctxHex.fillRect(this.bricks[i].x + 5, this.bricks[i].y + 5, 40, 40);
 
 			//left
-			if(this.bricks[i].x + size < 0)this.bricks[i].x = this.SCREEN.x;
+			if(this.bricks[i].x + size < 0)this.bricks[i].x = this.SCREEN_SIZE.x;
 			//right
-			else if(this.bricks[i].x > this.SCREEN.x)this.bricks[i].x = -size;
+			else if(this.bricks[i].x > this.SCREEN_SIZE.x)this.bricks[i].x = -size;
 			//up
-			else if(this.bricks[i].y + size < 0)this.bricks[i].y = this.SCREEN.y;
+			else if(this.bricks[i].y + size < 0)this.bricks[i].y = this.SCREEN_SIZE.y;
 			//down
-			else if(this.bricks[i].y > this.SCREEN.y)this.bricks[i].y = -size;
+			else if(this.bricks[i].y > this.SCREEN_SIZE.y)this.bricks[i].y = -size;
 		}
 	}
 

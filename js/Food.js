@@ -5,7 +5,7 @@ class Food{
 		this.sizeMin = 2;
 		this.sizeMax = 5;
 		this.mainColor = ut.randomColor();
-		this.supportColor = ut.color(this.midColor, 0.5);
+		this.supportColor = ut.color(this.mainColor, 0.5);
 
 		this.size = ut.random(this.sizeMin, this.sizeMax);		
 		
@@ -13,26 +13,24 @@ class Food{
 
 	draw(player){	
 
-		
-		// var grd=this.ctx.createRadialGradient(this.pos.x + this.size/2, this.pos.y + this.size/2, 2,
-		// this.pos.x + this.size/2 + 3, this.pos.y + this.size/2 + 3, 10);		
-		// grd.addColorStop(0, this.supportColor);
-		// grd.addColorStop(1, this.mainColor);
-
-		var grd = this.ctx.createLinearGradient(this.pos.x, this.pos.y, this.size*2, this.size*2);
-		grd.addColorStop(0, this.mainColor);
-		grd.addColorStop(1, this.supportColor);
-		this.ctx.fillStyle = grd;
-
-		this.ctx.fillStyle = grd;
-
 		this.pos.x -= player.velocity.x;
 		this.pos.y -= player.velocity.y;
 
+		this.ctx.shadowBlur = 5;		
+		this.ctx.shadowColor = this.supportColor;
+		this.ctx.fillStyle = this.supportColor;
 		this.ctx.beginPath();
 		this.ctx.arc(this.pos.x, this.pos.y, this.size, 0, 2*Math.PI);		
 		this.ctx.fill();
-									
+
+		this.ctx.shadowBlur = 8;
+		this.ctx.shadowColor = this.mainColor;
+		this.ctx.fillStyle = this.mainColor;
+		this.ctx.beginPath();
+		this.ctx.arc(this.pos.x, this.pos.y, this.size, Math.PI, 2*Math.PI);		
+		this.ctx.fill();	
+
+		this.ctx.shadowBlur = 0;											
 	}
 
 	die(){

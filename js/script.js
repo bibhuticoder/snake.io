@@ -1,17 +1,15 @@
-var canvas = document.getElementById("canvas1");
-var ctxSnake = document.getElementById("canvas1").getContext("2d");
-var ctxFood = document.getElementById("canvas2").getContext("2d");
-var ctxHex = document.getElementById("canvas3").getContext("2d");
+var canvas = document.getElementById("canvasSnake");
+var ctxSnake = document.getElementById("canvasSnake").getContext("2d");
+var ctxFood = document.getElementById("canvasFood").getContext("2d");
+var ctxHex = document.getElementById("canvasHex").getContext("2d");
 var ut = new Util();
 var game = new Game(canvas, ctxSnake, ctxFood, ctxHex);
 
 canvas.onmousemove = function(e){
-	if(game.mouseDown){
-		
+	if(game.mouseDown){		
 		game.cursor = ut.getMousePos(canvas, e);	
 		var ang = ut.getAngle(game.snakes[0].arr[0], game.cursor);				
-		game.snakes[0].changeAngle(ang);
-		
+		game.snakes[0].changeAngle(ang);		
 	}
 }
 

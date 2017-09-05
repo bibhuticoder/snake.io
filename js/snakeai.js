@@ -12,8 +12,8 @@ class SnakeAi{
 		this.midColor = ut.color(this.mainColor, 0.33);
 		this.supportColor = ut.color(this.midColor, 0.33);
 
-		this.size = 5;
-		this.MAXSIZE = 8;	
+		this.MAXSIZE = 12;	
+		this.size = 7;
 		this.length = ut.random(10, 50);			
 		this.arr = [];		
 
