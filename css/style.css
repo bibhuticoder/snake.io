@@ -9,7 +9,7 @@ body{
 	position: relative;	
 	/*background-image: url("../bg.jpg");
 	background-repeat: repeat;*/
-	background-color: dimgray;	
+	background-color: #17202A;	
 	border-radius: 5px;
 	margin:0 auto;		
 }
@@ -24,7 +24,12 @@ body{
 
 #canvas2{
 	background-color: transparent;
-	z-index: 2;
+	z-index: 4;
+}
+
+#canvas3{
+	background-color: transparent;
+	z-index: 3;
 }
 
 #canvas1{	

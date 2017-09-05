@@ -23,9 +23,31 @@ class Util{
 	}
 
 	randomColor(){
-		var colors = ['salmon', 'purple', 'green', 'maroon', 'skyblue', 'deepskyblue', 'orange', 'gold', "blue"];
+		// var colors = ['salmon', 'purple', 'green', 'maroon', 'skyblue',
+		// 'deepskyblue', 'orange', 'gold', "blue", "yellow", "pink", "GoldenRod",
+		// "IndianRed", "LightSeaGreen"];
+
+		var colors = ["#C0392B", "#E74C3C", "#9B59B6", "#8E44AD", "#2980B9",
+		"#3498DB", "#17A589", "#138D75", "#229954", "#28B463", "#D4AC0D",
+		 "#D68910", "#CA6F1E", "#BA4A00"];
+
 		return colors[this.random(0, colors.length-1)]
 	}
+
+	randomColorPair(){
+		var pairs = [
+			["salmon", "lightpink"],			
+			["Chocolate", "Coral"],
+			["DarkCyan ", "DarkGoldenRod"],
+			["DarkOliveGreen ", "DarkOrange"],
+			["DarkSalmon ", "DarkSeaGreen"],
+			["Gold", "GoldenRod"],
+			["Green", "GreenYellow"],
+			["HotPink", "IndianRed"]
+		];
+		return pairs[this.random(0, pairs.length-1)];
+	}
+	
 
 	randomName(){
 		var names = ['ram', 'shyam', 'hari', 'geeta', 'joe', 'johm', 'harry', 'peter'];
@@ -40,7 +62,8 @@ class Util{
 
 
 	getDistance(i, f){
-		return Math.abs(Math.sqrt(Math.pow((f.x-i.x), 2) + Math.pow((f.y-i.y), 2)));
+		return Math.abs(Math.sqrt(
+			Math.pow((f.x-i.x), 2) + Math.pow((f.y-i.y), 2)));
 	}
 
 	getAngle(p1, p2){		
@@ -50,41 +73,38 @@ class Util{
     }
 
     cirCollission(x1, y1, r1, x2, y2, r2){
-    	return (this.getDistance(new Point(x1, y1), new Point(x2, y2)) < (r1+r2));
+    	return (this.getDistance(new Point(x1, y1),
+    	new Point(x2, y2)) < (r1+r2));
     }
 
     drawHexagon(ctx, size, x, y){
 
-    	size -= 1;
-		ctx.beginPath();
-		ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
+    	var angle = 60;
 
+    	ctx.beginPath();
+		ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
 		for (var i=0; i < 7; i++) {
 			var p = x + size * Math.cos(i * 2 * Math.PI / 6);
 			var q = y + size * Math.sin(i * 2 * Math.PI / 6);
 			var point = new Point(p, q);
-			point = this.rotate(point, new Point(x, y), -30);
+			point = this.rotate(point, new Point(x, y), angle);
 		  	ctx.lineTo(point.x, point.y);
-		}
-		ctx.fillStyle = "gray";
+		}		
+		ctx.fillStyle = "black";
 		ctx.fill();
 
-
-		// ctx.beginPath();
-		// ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
-		// for (var i=0; i < 7; i++) {
-		// 	var p = x + size * Math.cos(i * 2 * Math.PI / 6);
-		// 	var q = y + size * Math.sin(i * 2 * Math.PI / 6);
-		// 	var point = new Point(p, q);
-		// 	// point = this.rotate(point, new Point(x, y), -30);
-		//   	ctx.lineTo(point.x, point.y);
-		// }
-
-		// ctx.lineWidth = 3;
-		// ctx.strokeStyle = "black";
-		// ctx.stroke();
-
-		// ctx.lineWidth = 1;
+    	size -= 2;
+		ctx.beginPath();
+		ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
+		for (var i=0; i < 7; i++) {
+			var p = x + size * Math.cos(i * 2 * Math.PI / 6);
+			var q = y + size * Math.sin(i * 2 * Math.PI / 6);
+			var point = new Point(p, q);
+			point = this.rotate(point, new Point(x, y), angle);
+		  	ctx.lineTo(point.x, point.y);
+		}				
+		ctx.fillStyle = "#2C3E50";
+		ctx.fill();		
     }
 
     rotate(p, c, angle){
@@ -105,4 +125,38 @@ class Util{
 	    return p;
     }
 
+    lightenColor (color, percent) {
+	 //  	var num = parseInt(color,16);
+		// var amt = Math.round(2.55 * percent);
+		// var R = (num >> 16) + amt;
+		// var B = (num >> 8 & 0x00FF) + amt;
+		// var G = (num & 0x0000FF) + amt;
+
+		// return (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1);
+	}
+
+	color(hex, lum) {
+
+		// validate hex string
+		hex = String(hex).replace(/[^0-9a-f]/gi, '');
+		if (hex.length < 6) {
+			hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+		}
+		lum = lum || 0;
+
+		// convert to decimal and change luminosity
+		var rgb = "#", c, i;
+		for (i = 0; i < 3; i++) {
+			c = parseInt(hex.substr(i*2,2), 16);
+			c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+			rgb += ("00"+c).substr(c.length);
+		}
+
+		return rgb;
+	}
+
 }
+
+
+
+

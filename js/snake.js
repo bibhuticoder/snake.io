@@ -9,10 +9,16 @@ class Snake{
 		game.WORLD.y/2 - game.SCREEN.y/2);		
 
 		this.velocity = new Point(2, -3); //arbitary point		
-		this.angle = 0;	
-		this.length = 10;	
-		this.size = 5;			
-		this.color = "salmon";
+		this.angle = ut.random(0, Math.PI);	
+		this.length = 10;
+		this.MAXSIZE = 10;	
+		this.size = 6;			
+		
+		// color
+		this.mainColor = ut.randomColor();
+		this.midColor = ut.color(this.mainColor, 0.33);
+		this.supportColor = ut.color(this.midColor, 0.33);
+
 		this.arr = [];
 		
 		this.arr.push(new Point(game.SCREEN.x/2, game.SCREEN.y/2));
@@ -30,46 +36,57 @@ class Snake{
 		//head
 		this.ctx.fillStyle = this.color;
 		this.ctx.beginPath();
-		this.ctx.arc(x, y, this.size+1, 0, 2*Math.PI);		
+		this.ctx.arc(x, y, this.size+2, 0, 2*Math.PI);		
+		this.ctx.fill();
+
+		//face
+		this.ctx.fillStyle = "whitesmoke";
+		this.ctx.beginPath();
+		this.ctx.arc(x, y, this.size, 0, 2*Math.PI);		
 		this.ctx.fill();
 
 		//eye
-		this.ctx.fillStyle = "white";
+		var d = 2;
+		this.ctx.fillStyle = "black";
 		this.ctx.beginPath();
-		this.ctx.arc(x, y, this.size-1, 0, 2*Math.PI);		
+		this.ctx.arc(x + d*Math.cos(this.angle), y + d*Math.sin(this.angle), this.size/1.5, 0, 2*Math.PI);		
 		this.ctx.fill();
 
+		//retina
+		var d = 3;
+		this.ctx.fillStyle = "white";
+		this.ctx.beginPath();
+		this.ctx.arc(x + d*Math.cos(this.angle), y + d*Math.sin(this.angle), this.size/4, 0, 2*Math.PI);		
+		this.ctx.fill();
+
+
 		//name
-		this.ctx.fillStyle = this.color;
+		this.ctx.fillStyle = "whitesmoke";
 		this.ctx.font="10px Arial";
 		this.ctx.fillText(this.name, x-5, y-10);
-
 
 	}
 
 	drawBody(x, y, i){
-		this.ctx.shadowBlur=2;
-		var grd=this.ctx.createRadialGradient(x, y, 2, x+3, y+3, 10);
-		grd.addColorStop(0,"white");
-		grd.addColorStop(1, this.color);
+		
+		var grd=this.ctx.createRadialGradient(x, y, 2, x+4, y+4, 10);
+		grd.addColorStop(0, this.supportColor);
+		grd.addColorStop(0.5, this.midColor);
+		grd.addColorStop(1, this.mainColor);			
 		this.ctx.fillStyle = grd;
 		this.ctx.beginPath();
-		this.ctx.arc(x, y, this.size - (i*0.005), 0, 2*Math.PI);
+		this.ctx.arc(x, y, this.size - (i*0.01), 0, 2*Math.PI);
 		this.ctx.fill();
-
-		this.ctx.strokeStyle = "white";
-		this.ctx.beginPath();
-		this.ctx.arc(x, y, this.size - (i*0.005), 0, 2*Math.PI);
-		this.ctx.stroke();
-
+	
 	}
 
 	move(){
 		this.velocity.x = this.force*Math.cos(this.angle);
 		this.velocity.y = this.force*Math.sin(this.angle);
+		var d = 2;
 		for(var i=this.length-1; i>=1; i--){
-			this.arr[i].x = this.arr[i-1].x - 3*Math.cos(this.angle);
-			this.arr[i].y = this.arr[i-1].y - 3*Math.sin(this.angle);			
+			this.arr[i].x = this.arr[i-1].x - d*Math.cos(this.angle);
+			this.arr[i].y = this.arr[i-1].y - d*Math.sin(this.angle);			
 			this.drawBody(this.arr[i].x, this.arr[i].y, i);
 		}
 		this.arr[0].x += this.velocity.x;
@@ -81,36 +98,56 @@ class Snake{
 		this.drawHead();	
 
 		this.checkBoundary();
-		this.checkCollission();
+		this.checkCollissionFood();
+		this.checkCollissionSnake();
 	}
 
-	checkBoundary(){
-		
+	checkBoundary(){		
 		var x = this.arr[0].x;
 		var y = this.arr[0].y;
-
 		if(x > 700) this.arr[0].x = 700;
 		else if(x < 100) this.arr[0].x = 100;
 		if(y > 300) this.arr[0].y = 300;
 		else if(y < 100) this.arr[0].y = 100;
 
-
 	}
 	
-	//check snake and fod collission
-	checkCollission(){	
+	//check snake and food collission
+	checkCollissionFood(){	
 		var x = this.arr[0].x;
 		var y = this.arr[0].y;
-
 		for (var i = 0; i < game.foods.length; i++) {
-			if(ut.cirCollission(x, y, this.size, game.foods[i].pos.x, game.foods[i].pos.y, game.foods[i].size)){
-				 game.foods.splice(i, 1);
-				 this.length++;
-				 this.score++;
-				 this.arr.push(new Point(-100, -100));				 
-				 if(this.length%10 == 0) this.size++;	
+			if(ut.cirCollission(x, y, this.size+3, game.foods[i].pos.x,
+			game.foods[i].pos.y, game.foods[i].size)){
+				game.foods[i].reinstate();
+				this.addScore();			 
+				this.incSize();
 			}			
 		}
+	}
+
+	checkCollissionSnake(){
+		var x = this.arr[0].x;
+		var y = this.arr[0].y;
+		for (var i = 1; i < game.snakes.length; i++) {
+			for (var j = 0; j < game.snakes[i].arr.length; j+=2) {
+				if(ut.cirCollission(x, y, this.size,
+				game.snakes[i].arr[j].x, game.snakes[i].arr[j].y, game.snakes[i].size)){
+					game.snakes.splice(i, 1);
+				}       
+			}			
+		}
+	}
+
+	addScore(){
+		this.length++;
+		this.score++;
+		this.arr.push(new Point(-100, -100));	
+	}
+
+	incSize(){
+		if(this.length % 30 == 0) this.size++;	
+		this.size %= this.MAXSIZE;	
 	}
 
 	
