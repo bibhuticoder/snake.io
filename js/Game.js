@@ -8,8 +8,7 @@ class Game{
 		this.cursor;
 		this.WORLD = new Point(2000, 1000);		
 		this.SCREEN = new Point(800, 400);
-		this.SNAKE_BOUNDARY = new Point(600, 200);
-				
+						
 		this.snakes = [];		
 		this.foods = [];
 		this.bricks = [];		
@@ -21,10 +20,10 @@ class Game{
 		this.cursor = new Point(0,0);		
 		this.snakes[0] = new Snake(this.ctxSnake);
 
-		for(var i=0; i<10; i++) this.snakes.push(new SnakeAi(this.ctxSnake));
+		for(var i=0; i<2; i++) this.snakes.push(new SnakeAi(this.ctxSnake));
 
 		// generate foods
-		for(var i=0; i<500; i++){
+		for(var i=0; i<500; i++){			
 			this.foods.push(new Food(this.ctxFood, ut.random(-600, 1800), ut.random(-300, 900)));
 		}
 
@@ -46,12 +45,12 @@ class Game{
 
 	draw(){
 
-		
-		//draw world
-		this.drawWorld();
-		
 		//draw bricks
 		this.drawBricks();
+
+		//draw world
+		this.drawWorld();	
+		
 
 		// move yourself
 		this.snakes[0].move();
@@ -96,8 +95,8 @@ class Game{
 
 		//draw player in map
 		this.ctxFood.fillStyle = "red";
-		var playerInMap = new Point(mapSize.x/this.WORLD.x * this.snakes[0].pos.x,
-		mapSize.y/this.WORLD.y * this.snakes[0].pos.y);
+		var playerInMap = new Point(mapSize.x/1800 * this.snakes[0].pos.x,
+		mapSize.y/900 * this.snakes[0].pos.y);
 		// console.log(playerInMap);
 		this.ctxFood.beginPath();
 		this.ctxFood.arc(start.x + playerInMap.x, this.canvas.height-mapSize.y + playerInMap.y, 2, 0, 2*Math.PI);
@@ -105,19 +104,23 @@ class Game{
 	}
 
 	drawBricks(){
-		this.ctxFood.fillStyle = "gray";
+		var size = 50;		
 		for(var i=0; i<this.bricks.length; i++){			
-			ut.drawHexagon(this.ctxHex, 22, this.bricks[i].x + 25, this.bricks[i].y + 25);	
-			this.bricks[i].x += -1 * this.snakes[0].velocity.x;
-			this.bricks[i].y += -1 * this.snakes[0].velocity.y;
+			// ut.drawHexagon(this.ctxHex, 22, this.bricks[i].x + size/2, this.bricks[i].y + size/2);	
+			this.bricks[i].x -= this.snakes[0].velocity.x;
+			this.bricks[i].y -= this.snakes[0].velocity.y;
+
+			// this.ctxHex.fillStyle = "#2C3E50";
+			// this.ctxHex.fillRect(this.bricks[i].x + 5, this.bricks[i].y + 5, 40, 40);
+
 			//left
-			if(this.bricks[i].x + 50 < 0)this.bricks[i].x = this.SCREEN.x;
+			if(this.bricks[i].x + size < 0)this.bricks[i].x = this.SCREEN.x;
 			//right
-			else if(this.bricks[i].x > this.SCREEN.x)this.bricks[i].x = -50;
+			else if(this.bricks[i].x > this.SCREEN.x)this.bricks[i].x = -size;
 			//up
-			else if(this.bricks[i].y + 50 < 0)this.bricks[i].y = this.SCREEN.y;
+			else if(this.bricks[i].y + size < 0)this.bricks[i].y = this.SCREEN.y;
 			//down
-			else if(this.bricks[i].y > this.SCREEN.y)this.bricks[i].y = -50;
+			else if(this.bricks[i].y > this.SCREEN.y)this.bricks[i].y = -size;
 		}
 	}
 

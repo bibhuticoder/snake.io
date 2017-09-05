@@ -17,7 +17,7 @@ class SnakeAi{
 		this.length = ut.random(10, 50);			
 		this.arr = [];		
 
-		this.arr.push(new Point(ut.random(0, 2000), ut.random(0, 1000)));
+		this.arr.push(new Point(ut.random(-6000, 1800), ut.random(-300, 900)));
 		for(var i=1; i<this.length; i++) this.arr.push(new Point(this.arr[i-1].x, this.arr[i-1].y));
 
 
@@ -117,8 +117,8 @@ class SnakeAi{
 			this.arr[i].y = this.arr[i-1].y - 1*Math.sin(this.angle);			
 			
 			//relative motion with player
-			this.arr[i].x += (-4 * player.velocity.x);
-			this.arr[i].y += (-4 * player.velocity.y);
+			this.arr[i].x += (-1 * player.velocity.x);
+			this.arr[i].y += (-1 * player.velocity.y);
 
 			this.drawBody(this.arr[i].x, this.arr[i].y, i);
 		}
@@ -128,8 +128,8 @@ class SnakeAi{
 		this.arr[0].y += this.velocity.y;
 
 		//relative motion with player
-		this.arr[0].x += (-4 * player.velocity.x);
-		this.arr[0].y += (-4 * player.velocity.y);
+		this.arr[0].x -= player.velocity.x;
+		this.arr[0].y -= player.velocity.y;
 
 		
 		this.drawHead();
@@ -145,7 +145,7 @@ class SnakeAi{
 		for (var i = 0; i < game.foods.length; i++) {
 			if(ut.cirCollission(x, y, this.size, game.foods[i].pos.x,
 			game.foods[i].pos.y, game.foods[i].size)){
-				game.foods[i].reinstate();
+				game.foods[i].die();
 				this.addScore();			 
 				this.incSize();
 			}			
@@ -175,7 +175,7 @@ class SnakeAi{
 
 	incSize(){
 		if(this.length%30 == 0) this.size++;	
-		this.size %= this.MAXSIZE;	
+		if(this.size > this.MAXSIZE) this.size = this.MAXSIZE;		
 	}
 
 	die(){

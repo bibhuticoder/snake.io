@@ -3,16 +3,15 @@ class Snake{
 		this.ctx = ctx;
 		this.name = "Bibhuti";
 		this.score = 0;
-		this.force =  1;
+		this.force =  5;
 
-		this.pos = new Point(game.WORLD.x/2 - game.SCREEN.x/2,
-		game.WORLD.y/2 - game.SCREEN.y/2);		
+		this.pos = new Point(ut.random(-600, 1800), ut.random(-300, 900));		
 
 		this.velocity = new Point(2, -3); //arbitary point		
 		this.angle = ut.random(0, Math.PI);	
 		this.length = 10;
-		this.MAXSIZE = 10;	
-		this.size = 6;			
+		this.MAXSIZE = 12;	
+		this.size = 7;			
 		
 		// color
 		this.mainColor = ut.randomColor();
@@ -75,7 +74,10 @@ class Snake{
 		grd.addColorStop(1, this.mainColor);			
 		this.ctx.fillStyle = grd;
 		this.ctx.beginPath();
-		this.ctx.arc(x, y, this.size - (i*0.01), 0, 2*Math.PI);
+
+		var radius = this.size - (i*0.01);
+		if(radius < 0) radius = 1;
+		this.ctx.arc(x, y, radius, 0, 2*Math.PI);
 		this.ctx.fill();
 	
 	}
@@ -83,35 +85,24 @@ class Snake{
 	move(){
 		this.velocity.x = this.force*Math.cos(this.angle);
 		this.velocity.y = this.force*Math.sin(this.angle);
-		var d = 2;
-		for(var i=this.length-1; i>=1; i--){
+		
+		//magic
+		var d = this.size/2;
+		for(var i=this.length-1; i>=1; i--){			
 			this.arr[i].x = this.arr[i-1].x - d*Math.cos(this.angle);
 			this.arr[i].y = this.arr[i-1].y - d*Math.sin(this.angle);			
 			this.drawBody(this.arr[i].x, this.arr[i].y, i);
 		}
-		this.arr[0].x += this.velocity.x;
-		this.arr[0].y += this.velocity.y;
 
 		this.pos.x += this.velocity.x;
 		this.pos.y += this.velocity.y;
+		this.drawHead();
 
-		this.drawHead();	
-
-		this.checkBoundary();
+		
 		this.checkCollissionFood();
 		this.checkCollissionSnake();
 	}
 
-	checkBoundary(){		
-		var x = this.arr[0].x;
-		var y = this.arr[0].y;
-		if(x > 700) this.arr[0].x = 700;
-		else if(x < 100) this.arr[0].x = 100;
-		if(y > 300) this.arr[0].y = 300;
-		else if(y < 100) this.arr[0].y = 100;
-
-	}
-	
 	//check snake and food collission
 	checkCollissionFood(){	
 		var x = this.arr[0].x;
@@ -119,7 +110,7 @@ class Snake{
 		for (var i = 0; i < game.foods.length; i++) {
 			if(ut.cirCollission(x, y, this.size+3, game.foods[i].pos.x,
 			game.foods[i].pos.y, game.foods[i].size)){
-				game.foods[i].reinstate();
+				game.foods[i].die();
 				this.addScore();			 
 				this.incSize();
 			}			
@@ -147,7 +138,11 @@ class Snake{
 
 	incSize(){
 		if(this.length % 30 == 0) this.size++;	
-		this.size %= this.MAXSIZE;	
+		if(this.size > this.MAXSIZE) this.size = this.MAXSIZE;	
+	}
+
+	changeAngle(angle){
+		this.angle = angle;
 	}
 
 	

@@ -22,35 +22,17 @@ class Util{
 	    return (Math.random() * (max - min)+ min).toFixed(4);
 	}
 
-	randomColor(){
-		// var colors = ['salmon', 'purple', 'green', 'maroon', 'skyblue',
-		// 'deepskyblue', 'orange', 'gold', "blue", "yellow", "pink", "GoldenRod",
-		// "IndianRed", "LightSeaGreen"];
-
+	randomColor(){	
 		var colors = ["#C0392B", "#E74C3C", "#9B59B6", "#8E44AD", "#2980B9",
 		"#3498DB", "#17A589", "#138D75", "#229954", "#28B463", "#D4AC0D",
 		 "#D68910", "#CA6F1E", "#BA4A00"];
-
 		return colors[this.random(0, colors.length-1)]
 	}
 
-	randomColorPair(){
-		var pairs = [
-			["salmon", "lightpink"],			
-			["Chocolate", "Coral"],
-			["DarkCyan ", "DarkGoldenRod"],
-			["DarkOliveGreen ", "DarkOrange"],
-			["DarkSalmon ", "DarkSeaGreen"],
-			["Gold", "GoldenRod"],
-			["Green", "GreenYellow"],
-			["HotPink", "IndianRed"]
-		];
-		return pairs[this.random(0, pairs.length-1)];
-	}
 	
-
 	randomName(){
-		var names = ['ram', 'shyam', 'hari', 'geeta', 'joe', 'johm', 'harry', 'peter'];
+		var names = ['ram', 'shyam', 'hari', 'geeta', 'joe', 'john', 'harry', 'peter',
+		'david', 'abc-123', 'dsf-'];
 		return names[this.random(0, names.length-1)]
 	}
 

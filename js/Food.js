@@ -4,7 +4,6 @@ class Food{
 		this.pos = new Point(x, y);		
 		this.sizeMin = 2;
 		this.sizeMax = 5;
-
 		this.mainColor = ut.randomColor();
 		this.supportColor = ut.color(this.midColor, 0.5);
 
@@ -27,19 +26,19 @@ class Food{
 
 		this.ctx.fillStyle = grd;
 
-		this.pos.x += -4 * player.velocity.x;
-		this.pos.y += -4 * player.velocity.y;
+		this.pos.x -= player.velocity.x;
+		this.pos.y -= player.velocity.y;
 
 		this.ctx.beginPath();
 		this.ctx.arc(this.pos.x, this.pos.y, this.size, 0, 2*Math.PI);		
 		this.ctx.fill();
-
-		
 									
 	}
 
-	reinstate(){
-		this.pos = new Point(ut.random(-600, 1800), ut.random(-300, 900));
+	die(){
+		var index = game.foods.indexOf(this);
+		game.foods.splice(index, 1);
 	}
+
 
 }
