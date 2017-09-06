@@ -104,7 +104,7 @@ class Util{
 	    // translate point back:
 	    p.x = xnew + c.x;
 	    p.y = ynew + c.y;
-	    return p;
+	    return new Point(p.x, p.y);
     }
 
     lightenColor (color, percent) {

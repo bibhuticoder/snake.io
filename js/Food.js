@@ -16,21 +16,21 @@ class Food{
 		this.pos.x -= player.velocity.x;
 		this.pos.y -= player.velocity.y;
 
-		this.ctx.shadowBlur = 5;		
-		this.ctx.shadowColor = this.supportColor;
+		// this.ctx.shadowBlur = 5;		
+		// this.ctx.shadowColor = this.supportColor;
 		this.ctx.fillStyle = this.supportColor;
 		this.ctx.beginPath();
 		this.ctx.arc(this.pos.x, this.pos.y, this.size, 0, 2*Math.PI);		
 		this.ctx.fill();
 
-		this.ctx.shadowBlur = 8;
-		this.ctx.shadowColor = this.mainColor;
+		// this.ctx.shadowBlur = 8;
+		// this.ctx.shadowColor = this.mainColor;
 		this.ctx.fillStyle = this.mainColor;
 		this.ctx.beginPath();
 		this.ctx.arc(this.pos.x, this.pos.y, this.size, Math.PI, 2*Math.PI);		
 		this.ctx.fill();	
 
-		this.ctx.shadowBlur = 0;											
+		// this.ctx.shadowBlur = 0;											
 	}
 
 	die(){

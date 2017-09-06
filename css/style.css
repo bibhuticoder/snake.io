@@ -24,9 +24,8 @@ body{
 }
 
 #canvasHex{
-	background-color: transparent;
-	z-index: 1;
-	/*background-color: black;*/
+	background-color: black;
+	z-index: 1;	
 }
 
 #canvasSnake{	
