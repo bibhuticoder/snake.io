@@ -14,13 +14,11 @@ class Util{
 	    return new Point(x, y);	    
 	}
 
-	random(min, max){        
+	random(min, max){  
+
 	    return Math.floor(Math.random() * (max - min + 1)) + min;	
 	}
 
-	randomF(min, max){        
-	    return (Math.random() * (max - min)+ min).toFixed(4);
-	}
 
 	randomColor(){	
 		var colors = ["#C0392B", "#E74C3C", "#9B59B6", "#8E44AD", "#2980B9",
@@ -34,12 +32,6 @@ class Util{
 		var names = ['ram', 'shyam', 'hari', 'geeta', 'joe', 'john', 'harry', 'peter',
 		'david', 'abc-123', 'dsf-'];
 		return names[this.random(0, names.length-1)]
-	}
-
-	toInt(number){ 
-	  return Math.round(  // round to nearest integer
-	    Number(number)    // type cast your input
-	  ); 
 	}
 
 
@@ -75,7 +67,7 @@ class Util{
 		ctx.fillStyle = "black";
 		ctx.fill();
 
-    	size -= 2;
+    	// size -= 1;
 		ctx.beginPath();
 		ctx.moveTo(x + size * Math.cos(0), y + size * Math.sin(0));
 		for (var i=0; i < 7; i++) {
@@ -104,18 +96,9 @@ class Util{
 	    // translate point back:
 	    p.x = xnew + c.x;
 	    p.y = ynew + c.y;
-	    return new Point(p.x, p.y);
+	    return p;
     }
 
-    lightenColor (color, percent) {
-	 //  	var num = parseInt(color,16);
-		// var amt = Math.round(2.55 * percent);
-		// var R = (num >> 16) + amt;
-		// var B = (num >> 8 & 0x00FF) + amt;
-		// var G = (num & 0x0000FF) + amt;
-
-		// return (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (B<255?B<1?0:B:255)*0x100 + (G<255?G<1?0:G:255)).toString(16).slice(1);
-	}
 
 	color(hex, lum) {
 

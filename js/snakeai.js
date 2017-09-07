@@ -7,7 +7,7 @@ class SnakeAi extends Snake{
 		this.pos = new Point(ut.random(-6000, 1800), ut.random(-300, 900));	
 		// this.pos = new Point(ut.random(0, 800), ut.random(0, 400));			
 		this.length = ut.random(10, 50);	
-		
+				
 		this.arr = [];
 		this.arr.push(this.pos);
 		for(var i=1; i<this.length; i++) this.arr.push(new Point(this.arr[i-1].x, this.arr[i-1].y));
@@ -21,7 +21,7 @@ class SnakeAi extends Snake{
 		var count = 0;
 		var units = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1];
 		var unit = 0.5;		
-		this.timer = setInterval(function(){			
+		this.timer = setInterval(function(){		
 
 			if(count > 20){
 				self.angle += 0;
@@ -31,8 +31,8 @@ class SnakeAi extends Snake{
 			else if(count > 0) self.angle -= unit;
 
 			count++;
-			count %= 30;		
-			
+			count %= 30;	
+		
 		}, 100);
 	}
 
@@ -65,9 +65,19 @@ class SnakeAi extends Snake{
 		if(this.headType == 0) this.drawHeadOneEye();
 		else if(this.headType == 1) this.drawHeadTwoEye();
 		else if(this.headType == 2) this.drawHeadTwoEyeBranch();
+
+
+		this.ctx.beginPath();
+		this.ctx.globalAlpha = 0.5;
+		this.ctx.fillStyle = "white";
+		if(this.inDanger) this.ctx.fillStyle = "red";
+ 		this.ctx.arc(this.pos.x, this.pos.y, this.shield, 0, 2*Math.PI);		
+		this.ctx.fill();
+		this.ctx.globalAlpha = 1;
+
 		
 		super.checkCollissionFood();	
-		super.checkCollissionSnake();
+		this.checkCollissionSnake();
 		this.checkBoundary();
 	}
 
@@ -90,13 +100,28 @@ class SnakeAi extends Snake{
 	
 	die(){
 		this.state = 1;
-		for (var i = 0; i < this.arr.length; i+=3) {
-			game.foods.push(new Food(game.ctxFood, this.arr[i].x, this.arr[i].y));
-		}
-		var index = game.snakes.indexOf(this);
-		console.log(index);
+		for (var i = 0; i < this.arr.length; i+=3)game.foods.push(new Food(game.ctxFood,
+		this.arr[i].x, this.arr[i].y));
+
+		var index = game.snakes.indexOf(this);		
 		game.snakes.splice(i, 1);
 	}
-	
 
+	checkCollissionSnake(){
+		var x = this.arr[0].x;
+		var y = this.arr[0].y;
+		for (var i = 0; i < game.snakes.length; i++) {
+			var s =  game.snakes[i];
+			if(s !== this){
+				for (var j = 0; j < s.arr.length; j++) {					
+					//death
+					if(ut.cirCollission(x, y, this.size, s.arr[j].x, s.arr[j].y, s.size)){
+						this.die();
+					}       
+				}
+			}			
+		}
+	}
+
+	
 }

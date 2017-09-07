@@ -7,7 +7,7 @@ class Snake{
 		this.force =  5;
 		this.state = 0;
 		this.headType = ut.random(0, 2);
-		
+	
 		
 		this.pos = new Point(game.SCREEN_SIZE.x/2, game.SCREEN_SIZE.y/2);	
 		this.velocity = new Point(0, 0); //arbitary point		
@@ -230,33 +230,33 @@ class Snake{
 
 	checkBoundary(){
 
-		//left
-		if(this.arr[0].x < game.world.x){
-			this.pos.x = game.world.x + this.size*2;
-			this.velocity.x *= -1;
-			this.angle = Math.PI - this.angle;
-		} 
+		// //left
+		// if(this.arr[0].x < game.world.x){
+		// 	this.pos.x = game.world.x + this.size*2;
+		// 	this.velocity.x *= -1;
+		// 	this.angle = Math.PI - this.angle;
+		// } 
 
-		//right
-		else if(this.arr[0].x > game.world.x + game.WORLD_SIZE.x){
-			this.pos.x = game.world.x + game.WORLD_SIZE.x - this.size*2;
-			this.velocity.x *= -1;
-			this.angle = Math.PI- this.angle;			
-		}
+		// //right
+		// else if(this.arr[0].x > game.world.x + game.WORLD_SIZE.x){
+		// 	this.pos.x = game.world.x + game.WORLD_SIZE.x - this.size*2;
+		// 	this.velocity.x *= -1;
+		// 	this.angle = Math.PI- this.angle;			
+		// }
 
-		//up
-		else if(this.arr[0].y < game.world.y){
-			this.pos.y = game.world.y + this.size*2;
-			this.velocity.y *= -1;
-			this.angle = Math.PI - this.angle;
-		} 
+		// //up
+		// else if(this.arr[0].y < game.world.y){
+		// 	this.pos.y = game.world.y + this.size*2;
+		// 	this.velocity.y *= -1;
+		// 	this.angle = Math.PI - this.angle;
+		// } 
 
-		//down
-		else if(this.arr[0].y > game.world.y + game.WORLD_SIZE.y){
-			this.pos.y = game.world.y + game.WORLD_SIZE.y - this.size*2;
-			this.velocity.y *= -1;
-			this.angle = Math.PI - this.angle;
-		}
+		// //down
+		// else if(this.arr[0].y > game.world.y + game.WORLD_SIZE.y){
+		// 	this.pos.y = game.world.y + game.WORLD_SIZE.y - this.size*2;
+		// 	this.velocity.y *= -1;
+		// 	this.angle = Math.PI - this.angle;
+		// }
 
 
 	}
@@ -310,8 +310,7 @@ class Snake{
 		for (var i = 0; i < this.arr.length; i+=3) game.foods.push(new Food(game.ctxFood,
 		this.arr[i].x, this.arr[i].y));
 		
-		var index = game.snakes.indexOf(this);
-		console.log(index);
+		var index = game.snakes.indexOf(this);		
 		game.snakes.splice(i, 1);
 	}
 
