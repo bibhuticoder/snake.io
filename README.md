@@ -38,3 +38,7 @@ Slither.io (http://slither.io/) but its made in JS entirely from scratch. All th
 - the player moves to the direction of cursor on mousemove
 
   ![Alt text](/snake.png)
+
+## Play online
+
+Also playable on [WASM Arcade](https://www.wasmarcade.online/snake/io/) — a single-player snake io page with AI opponents, free, no download.
